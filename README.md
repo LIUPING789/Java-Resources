@@ -26,3 +26,15 @@
     3､总结:浅拷贝是指在拷贝对象时，对于基本数据类型的变量会重新复制一份，而对于引用类型的变量只是对引用进行拷贝，没有对引用指向的对象进行拷贝。而深拷贝       是指在拷贝对象时，同时会对引用指向的对象进行拷贝。区别就在于是否对 对象中的引用变量所指向的对象进行拷贝。
     
  * __Java常见的几个运行时异常?__
+ 
+   1、ClassCastException
+
+   2、NullPointerException
+
+   3、ArrayIndexOutOfBoundsException
+
+   4、NumberFormatException
+
+   5、NoClassDefFoundException
+
+   6、.....
