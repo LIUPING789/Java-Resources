@@ -66,26 +66,42 @@
   
 *  __常用的JVM设置参数都有哪些?__
 
- ##### 整体考虑堆大小
-   -Xms3550m， 初始化堆大小。通常情况和-Xmx大小设置一样，避免虚拟机频繁自动计算后调整堆大小。-Xmx3550m，最大堆大小。
+    #### 整体考虑堆大小
+    -Xms3550m， 初始化堆大小。通常情况和-Xmx大小设置一样，避免虚拟机频繁自动计算后调整堆大小。-Xmx3550m，最大堆大小。
    
- ##### 新生代
+   #### 新生代
    -xmn2g，新生代大小。Sun官方推荐配置为整个堆的3/8。-XX:SurvivorRatio=8。Eden和Survivor的比值。
 
- ##### 老年代
+   #### 老年代
    老年代=整个堆大小-新生代-永久代
 
- ##### 永久代
-  -XX:Permsize=512m,设置永久代初始值。-XX:MaxPermsize=512m，设置永久代的最大值。
+   #### 永久代
+   -XX:Permsize=512m,设置永久代初始值。-XX:MaxPermsize=512m，设置永久代的最大值。
    注:Java8没有永久代说法，它们被称为元空间,-XX:MetaspaceSize=N
 
- ##### 考虑本机直接内存
-  -XX:MaxDirectMemorySize=100M。默认与Java堆大最大值(-Xmx)
+   #### 考虑本机直接内存
+   -XX:MaxDirectMemorySize=100M。默认与Java堆大最大值(-Xmx)
 
- ##### 考虑虚拟机栈
-  每个线程池的堆栈大小。在jdk5以上的版本，每个线程堆栈大小为1m，jdk5以前的版本是每个线程池大小为256k。一般设置256k。 -Xss256K。
+   #### 考虑虚拟机栈
+   每个线程池的堆栈大小。在jdk5以上的版本，每个线程堆栈大小为1m，jdk5以前的版本是每个线程池大小为256k。一般设置256k。 -Xss256K。
 
 ......
 
  [更多JVM参数配置](https://www.cnblogs.com/edwardlauxh/archive/2010/04/25/1918603.html)
+ 
+* __HashMap和HashTable的区别?__
+
+   1、继承的父类不同。 Hashtable继承自Dictionary类，而HashMap继承自AbstractMap类。但二者都实现了Map接口。
+
+   2、线程安全性不同。Hashtable 中的方法是Synchronize的，而HashMap中的方法在缺省情况下是非Synchronize的。在多线程并发的环境下，可以直接使用               Hashtable，不需要自己为它的方法实现同步，但使用HashMap时就必须要自己增加同步处理。(结构上的修改是指添加或删除一个或多个映射关系的任何操作;仅改变       与实例已经包含的键关联的值不是结构上的修改。)这一般通过对自然封装该映射的对象进行同步操作来完成。如果不存在这样的对象，则应该使用                     Collections.synchronizedMap 方法来“包装”该映射。最好在创建时完成这一操作，以防止对映射进行意外的非同步访问。
+
+   3、是否提供contains方法。 HashMap把Hashtable的contains方法去掉了，改成containsValue和containsKey，因为contains方法容易让人引起误解。Hashtable       则保留了contains，containsValue和containsKey三个方法，其中contains和containsValue功能相同。
+   
+   4、key和value是否允许null值。 Hashtable中，key和value都不允许出现null值。但是如果在Hashtable中有类似put(null,null)的操作，编译同样可以通过，因       为key和value都是Object类型，但运行时会抛出NullPointerException异常，这是JDK的规范规定的。HashMap中，null可以作为键，这样的键只有一个，可以有       一个或多个键所对应的值为null。
+
+   5、两个遍历方式的内部实现上不同。 Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式 。
+
+   6、hash值不同。哈希值的使用不同，HashTable直接使用对象的hashCode。而HashMap重新计算hash值。
+
+   7、内部实现使用的数组初始化和扩容方式不同。HashTable在不指定容量的情况下的默认容量为11，而HashMap为16，Hashtable不要求底层数组的容量一定要为2的整       数次幂，而HashMap则要求一定为2的整数次幂。Hashtable扩容时，将容量变为原来的2倍加1，而HashMap扩容时，将容量变为原来的2倍。
 
