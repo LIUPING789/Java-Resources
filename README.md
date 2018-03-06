@@ -104,4 +104,52 @@
    6、hash值不同。哈希值的使用不同，HashTable直接使用对象的hashCode。而HashMap重新计算hash值。
 
    7、内部实现使用的数组初始化和扩容方式不同。HashTable在不指定容量的情况下的默认容量为11，而HashMap为16，Hashtable不要求底层数组的容量一定要为2的整       数次幂，而HashMap则要求一定为2的整数次幂。Hashtable扩容时，将容量变为原来的2倍加1，而HashMap扩容时，将容量变为原来的2倍。
+  
+  * __ArrayList和Vector的主要区别?__
+  
+   1､Vector是线程安全的，源码中有很多的synchronized可以看出，而ArrayList不是。导致Vector效率无法和ArrayList相比;
+
+   2､ArrayList和Vector都采用线性连续存储空间，当存储空间不足的时候，ArrayList默认增加为原来的50%，Vector默认增加为原来的一倍;3.Vector可以设置            capacityIncrement，而ArrayList不可以，从字面理解就是capacity容量，Increment增加，容量增长的参数。
+   
+   * __List是有序的吗?__
+   
+   有序可重。有序或无序是指是否按照其添加的顺序来存储对象。List 是按照元素的添加顺序来存储的。
+   
+  * __ArrayList和LinkedList的区别?分别用在什么场景?__
+  
+   1､ArrayList是最常用的List实现类，内部是通过数组实现的，它允许对元素进行快速随机访问。数组的缺点是每个元素之间不能有间隔，当数组大小不满足时需要增加      存储能力，就要讲已经有数组的数据复制到新的存储空间中。当从ArrayList的中间位置插入或者删除元素时，需要对数组进行复制、移动、代价比较高。因此，它适      合随机查找和遍历，不适合插入和删除。
+
+   2､LinkedList是用链表结构存储数据的，很适合数据的动态插入和删除，随机访问和遍历速度比较慢。另外，他还提供了List接口中没有定义的方法，专门用于操作表头      和表尾元素，可以当作堆栈、队列和双向队列使用。
+   
+ *  __ArrayList默认大小是多少，是如何扩容的?__
+ 
+    ArrayList默认构造的容量为10，没错。 因为ArrayList的底层是由一个Object[]数组构成的，而这个Object[]数组，默认的长度是10，所以有的文章会说             ArrayList长度容量为10。然而你所指的size()方法，指的是“逻辑”长度。ArrayList默认size()是0。ArrayList之后扩容会按照1.5倍增长。
+    
+ * __List是线程安全的吗?如果要线程安全要怎么做?__
+ 
+   不安全。实现线程安全方法:
+
+   1､使用synchronized关键字。
+
+   2､使用Collections.synchronizedList()。
+   
+*  __怎么给List排序?__
+
+   1､实体类自己实现比较。实现comparable接口:public interface Comparable ，里面就一个方法声明:public int compareTo(T o);用Java中提供的对集合进行操      作的工具类Collections，其中的sort方法
+
+   2､Collections提供的第二种排序方法sort(List list, Comparator c)。
+   
+ * __Arrays.asList方法后的List可以扩容吗?__
+ 
+    不能！
+    原因是Arrays.asList方法返回的ArrayList是继承自AbstractList同时实现了RandomAccess和Serializable接口。如果改变长度会抛出                           UnsupportedOperationException异常。
+    
+*  __List和Array之间如何互相转换?__
+
+      list -> array =list.toArray()
+
+      array -> list = Arrays.asList()
+
+      迭代器循环法。
+   
 
