@@ -151,5 +151,83 @@
       array -> list = Arrays.asList()
 
       迭代器循环法。
-   
+      
+  *  __Collection集合接口和Map接口有什么关系?__
+  
+     都是集合框架体系，Collection定义的是单列集合。Map定义的是双列集合.
+     
+  *  __HashMap是线程安全的吗?线程安全的Map都有哪些?性能最好的是哪个?__
+  
+      HashMap不安全，线程安全的Map有hashTable、ConcurrentHashMap、通过Collections.synchronizedMap()。性能最好的是ConcurrentHashMap。通过分段锁来    实现线程安全，默认并发数是16，扩容是按16的倍数增长。hashMAP实现原理是由hash数组为主，存储一个key-val结构entry类的数组，当出现hash冲突时,通过链表来    解决问题。Jdk1.8中引入了红黑树,当链表的长度大于8 时会自动将链表转成红黑树。
 
+   hashMAp线程不安全，hashtable线程安全。Hash Table时不支持null的，hashmap支持nulll是因为将null放入hash表的0个buchect。
+
+   实现线程安全的两种方式：Collecttions.synchronizedMap()也可以用ConcurrentHashMap。Jdk7时通过桶的分段锁的方式实现，默认设置16段，当并发度超过16段    时按2的指幂增长。JDK8放弃分段锁的实现，通过节点的原子锁来实现锁。将分段锁的悲观锁改成平台型的乐观锁。乐观锁无法保证脏读，所以要通过原子快照来保证。
+   
+   [concurrenthashmap 线程安全原理] (http://www.importnew.com/22007.html)
+   
+ *  __使用HashMap有什么性能问题吗?__
+ 
+   当大量的key出现hash冲突时，链表会变长，从而影响get、put效率。而且当链表长度达到负载因子设置0.75长度值时，还会有扩容操作会很影响性能。
+   
+*  __hashMap默认大小是多少?内部是怎么扩容的?__
+
+   hashMap这里的默认值是16。当元素个数大于0.75×16 = 12时，HashMap会自动进行扩容。 oldlength *2个
+   
+*  __怎么按添加顺序存储元素?怎么按A-Z自然顺序存储元素?怎么自定义排序?__
+
+   1､hashMap的存储是无序的，想要有序存储需要在存储的key有序。其根本原因是存储位置是由hashcode决定的，hashcode是由key计算得来的。
+
+   2､通过Collections.sort()来排序。
+   
+* __HashMap使用对象作为key，如果hashcode相同会怎么处理?__
+
+   在hashmap中，由于key是不可以重复的，他在判断key是不是重复的时候就判断了hashcode这个方法，而且也用到了equals方法。这里不可以重复是说equals和          hashcode只要有一个不等就可以了。
+   
+*  __HashMap中的get操作是什么原理?__
+
+   只需要根据key的hashcode算出元素在数组中的下标,之后遍历Entry对象链表,直到找到元素为止。
+   
+* __TCP和UDP的区别，TCP为什么是三次握手，不是两次？__
+
+     **** TCP与UDP基本区别:
+
+     1､基于连接与无连接
+
+     2､TCP要求系统资源较多，UDP较少;
+
+     3､UDP程序结构较简单
+
+     4､流模式(TCP)与数据报模式(UDP);
+
+     5､TCP保证数据正确性，UDP可能丢包
+
+     6､TCP保证数据顺序，UDP不保证
+     
+     ****三次握手过程:
+
+     第一次握手：建立连接时,客户端发送syn包(syn=j)到服务器,并进入SYNSEND ,等待服务器确认。
+
+     第二次握手：服务器收到syn包，必须确认客户端的SYN （ ack=j+1 ），同时自己也发送一个SYN包（syn=k）即SYN+ACK包 ,此时服务器进入 SYNRECV状态;
+
+     第三次握手：客户端收到服务器的SYN+ACK包,向服务器发送确认包ACK(ack=k+1),此包发送完毕,客户端和服务器进入ESTABLISHED状态,完成三次握手
+     
+ *  __switch中可以使用String吗?__
+ 
+    在jdk 7 之前，switch 只能支持 byte、short、char、int 这几个基本数据类型和其对应的封装类型。Java 7中加入了对String类型的支持,底层编译时将语句转换     成if-else语句，支持String只是为了简化书写。不建议在switch中使用String。
+    
+ *  __String、StringBuffer、StringBuilder有什么区别?__
+ 
+    1､首先说运行速度，或者说是执行速度，在这方面运行速度快慢为:StringBuilder > StringBuffer > String
+
+    2､在线程安全上，StringBuilder是线程不安全的，而StringBuffer是线程安全的
+
+    3､应用场景，String-适用于少量的字符串操作的情况;StringBuilder-适用于单线程下在字符缓冲区进行大量操作的情况;StringBuffer-适用多线程下在字符缓冲区       进行大量操作的情况。
+    
+*  __可以自定义java.lang.String类并使用吗?__
+
+   #### 不能！
+   
+   Java类加载机制为代理模式，先交给其父加载器去加载，如果父加载器加载不了，则由自己加载。
+
+   我们自定义的类是由系统类加载器进行加载，而它的父加载器为扩展类加载器，扩展类加载器为引导类加载器。我们定义的java.lang.String最先由引导加载器加载，    而它负责加载Java核心库，但java.lang.String正是系统中的类，已经被引导加载器记载过了，所以不再加载自定义的java.lang.String。
