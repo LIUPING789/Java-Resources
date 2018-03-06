@@ -78,16 +78,19 @@
 ######
 
 老年代=整个堆大小-新生代-永久代
+
 永久代
 ######
 
 -XX:Permsize=512m,设置永久代初始值。-XX:MaxPermsize=512m，设置永久代的最大值。
 
 注:Java8没有永久代说法，它们被称为元空间,-XX:MetaspaceSize=N
+
 考虑本机直接内存
 ######
 
 -XX:MaxDirectMemorySize=100M。默认与Java堆大最大值(-Xmx)
+
 考虑虚拟机栈
 ######
 
